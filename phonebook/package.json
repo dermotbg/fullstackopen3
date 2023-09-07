@@ -1,0 +1,27 @@
+{
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "name": "phonebook",
+  "version": "1.0.0",
+  "main": "phonebook.js",
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
+  "scripts": {
+    "start": "node phonebook.js",
+    "dev": "nodemon phonebook.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dermotbg/fullstackopen3.git"
+  },
+  "author": "Dermot Bateman",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dermotbg/fullstackopen3/issues"
+  },
+  "homepage": "https://github.com/dermotbg/fullstackopen3#readme",
+  "description": ""
+}
