@@ -46,5 +46,11 @@ app.get('/info', (request, response) => {
   <p>${date}</p>`)
 })
 
+app.delete('/api/persons/:id', (request, response) => {
+  const id = Number(request.params.id)
+  nameData = nameData.filter(p => p.id !== id)
+  response.status(204).end()
+})
+
 const PORT = 3001
 app.listen(PORT)
