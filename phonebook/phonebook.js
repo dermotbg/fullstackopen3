@@ -55,7 +55,7 @@ app.delete('/api/persons/:id', (request, response) => {
 })
 
 const randomID = (min, max) => Math.floor(Math.random() * (max - min) + min)
-const nameCheck = (name) => nameData.some(n => n.name === name)
+const nameCheck = (name) => nameData.some(n => n.name.toLowerCase() === name.toLowerCase())
 
 app.post('/api/persons', (request, response) => {
   const body = request.body
