@@ -28,6 +28,18 @@ app.get('/api/persons', (request, response) => {
     response.json(nameData)
 })
 
+app.get('/api/persons/:id', (request, response) => {
+  const id = Number(request.params.id)
+  const person = nameData.find(p => p.id === id)
+  if (person){
+    response.json(person)
+  }
+  else {
+    response.statusMessage = 'No such person found'
+    response.status(404).end()
+  }
+})
+
 app.get('/info', (request, response) => {
   const date = new Date()
   response.send(`<p>Phonebook has info for ${nameData.length} people</p>
