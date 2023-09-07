@@ -1,6 +1,8 @@
 const express = require('express')
 const app = express()
 
+app.use(express.json())
+
 let nameData = [
     { 
       "id": 1,
@@ -50,6 +52,34 @@ app.delete('/api/persons/:id', (request, response) => {
   const id = Number(request.params.id)
   nameData = nameData.filter(p => p.id !== id)
   response.status(204).end()
+})
+
+const generateID = () => {
+  const maxId = nameData.length > 0
+  ? Math.max(...nameData.map(n => n.id))
+  : 0
+  return maxId +1 
+} 
+
+const randomID = (min, max) => {
+  return Math.floor(Math.random() * (max - min) + min)
+}
+
+app.post('/api/persons', (request, response) => {
+  const body = request.body
+  if (!body.name) {
+    return response.status(400).json({
+      "error": "Content Missing"
+    })
+  }
+  const maxId = Math.max(...nameData.map(n => n.id))
+  const entry = {
+    id: randomID((maxId + 1), (maxId + 10)),
+    name: body.name,
+    number: body.number
+  }
+  nameData = nameData.concat(entry)
+  response.json(entry)
 })
 
 const PORT = 3001
