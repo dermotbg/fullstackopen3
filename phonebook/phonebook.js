@@ -54,24 +54,25 @@ app.delete('/api/persons/:id', (request, response) => {
   response.status(204).end()
 })
 
-const generateID = () => {
-  const maxId = nameData.length > 0
-  ? Math.max(...nameData.map(n => n.id))
-  : 0
-  return maxId +1 
-} 
-
-const randomID = (min, max) => {
-  return Math.floor(Math.random() * (max - min) + min)
-}
+const randomID = (min, max) => Math.floor(Math.random() * (max - min) + min)
+const nameCheck = (name) => nameData.some(n => n.name === name)
 
 app.post('/api/persons', (request, response) => {
   const body = request.body
-  if (!body.name) {
+  const name = nameCheck(body.name)
+
+
+  if (!body.name || !body.number) {
     return response.status(400).json({
-      "error": "Content Missing"
+      "error": "Name or Number missing"
     })
   }
+  else if (name) {
+    return response.status(400).json({
+      "error": "Name already exists"
+    })
+  }
+
   const maxId = Math.max(...nameData.map(n => n.id))
   const entry = {
     id: randomID((maxId + 1), (maxId + 10)),
