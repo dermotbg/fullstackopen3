@@ -26,6 +26,4 @@ entrySchema.set('toJSON', {
   }
 })
 
-// const Entry = mongoose.model('Entry', entrySchema)
-
 module.exports = mongoose.model('Entry', entrySchema)

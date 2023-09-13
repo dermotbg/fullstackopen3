@@ -81,9 +81,7 @@ app.post('/api/persons', (request, response) => {
     })
   }
 
-  // const maxId = Math.max(...nameData.map(n => n.id))
   const entry = new Entry({
-    // id: randomID((maxId + 1), (maxId + 10)),
     name: body.name,
     number: body.number
   })
@@ -91,8 +89,6 @@ app.post('/api/persons', (request, response) => {
     console.log(savedEntry)
     response.json(savedEntry)
   })
-  // nameData = nameData.concat(entry)
-  // response.json(entry)
 })
 
 const PORT = process.env.PORT
