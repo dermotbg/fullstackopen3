@@ -1,7 +1,9 @@
+require('dotenv').config()
 const cors = require('cors')
 const express = require('express')
 const morgan = require('morgan')
 const app = express()
+const Entry = require('./models/entry')
 
 app.use(cors())
 app.use(express.static('dist'))
@@ -37,19 +39,15 @@ let nameData = [
 ]
 
 app.get('/api/persons', (request, response) => {
-    response.json(nameData)
+    Entry.find({}).then(entries => {
+      response.json(entries)
+  })
 })
 
 app.get('/api/persons/:id', (request, response) => {
-  const id = Number(request.params.id)
-  const person = nameData.find(p => p.id === id)
-  if (person){
+    Entry.findById(request.params.id).then(person => {
     response.json(person)
-  }
-  else {
-    response.statusMessage = 'No such person found'
-    response.status(404).end()
-  }
+    })
 })
 
 app.get('/info', (request, response) => {
@@ -83,15 +81,21 @@ app.post('/api/persons', (request, response) => {
     })
   }
 
-  const maxId = Math.max(...nameData.map(n => n.id))
-  const entry = {
-    id: randomID((maxId + 1), (maxId + 10)),
+  // const maxId = Math.max(...nameData.map(n => n.id))
+  const entry = new Entry({
+    // id: randomID((maxId + 1), (maxId + 10)),
     name: body.name,
     number: body.number
-  }
-  nameData = nameData.concat(entry)
-  response.json(entry)
+  })
+  entry.save().then(savedEntry => {
+    console.log(savedEntry)
+    response.json(savedEntry)
+  })
+  // nameData = nameData.concat(entry)
+  // response.json(entry)
 })
 
-const PORT = process.env.PORT || 3001
+const PORT = process.env.PORT
 app.listen(PORT)
+console.log(`Server Running on ${PORT}`)
+console.log(`DB Running on ${process.env.DB_URL}`)
