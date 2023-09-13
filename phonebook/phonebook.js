@@ -57,9 +57,11 @@ app.get('/info', (request, response) => {
 })
 
 app.delete('/api/persons/:id', (request, response) => {
-  const id = Number(request.params.id)
-  nameData = nameData.filter(p => p.id !== id)
-  response.status(204).end()
+  Entry.findByIdAndRemove(request.params.id)
+    .then(result => {
+      response.status(204).end()
+    })
+    // .catch to go here 
 })
 
 const randomID = (min, max) => Math.floor(Math.random() * (max - min) + min)

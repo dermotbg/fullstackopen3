@@ -1,2 +1,5 @@
 
-DELETE https://icy-flower-2825.fly.dev/api/persons/8
+DELETE https://icy-flower-2825.fly.dev/api/persons/65015058766e62bcc0c55af3
+
+### dev
+DELETE http://localhost:3001/api/persons/65015058766e62bcc0c55af3
