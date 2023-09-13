@@ -5,9 +5,9 @@ const morgan = require('morgan')
 const app = express()
 const Entry = require('./models/entry')
 
-app.use(cors())
-app.use(express.static('dist'))
 app.use(express.json())
+app.use(express.static('dist'))
+app.use(cors())
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :details'))
 
 morgan.token('details', (req, res) => {
@@ -44,10 +44,12 @@ app.get('/api/persons', (request, response) => {
   })
 })
 
-app.get('/api/persons/:id', (request, response) => {
-    Entry.findById(request.params.id).then(person => {
-    response.json(person)
-    })
+app.get('/api/persons/:id', (request, response, next) => {
+    Entry.findById(request.params.id)
+      .then(person => {
+        response.json(person)
+      })
+      .catch(error => next(error))
 })
 
 app.get('/info', (request, response) => {
@@ -56,21 +58,20 @@ app.get('/info', (request, response) => {
   <p>${date}</p>`)
 })
 
-app.delete('/api/persons/:id', (request, response) => {
+app.delete('/api/persons/:id', (request, response, next) => {
   Entry.findByIdAndRemove(request.params.id)
     .then(result => {
       response.status(204).end()
     })
-    // .catch to go here 
+    .catch(error => next(error))
 })
 
-const randomID = (min, max) => Math.floor(Math.random() * (max - min) + min)
+// const randomID = (min, max) => Math.floor(Math.random() * (max - min) + min)
 const nameCheck = (name) => nameData.some(n => n.name.toLowerCase() === name.toLowerCase())
 
-app.post('/api/persons', (request, response) => {
+app.post('/api/persons', (request, response, next) => {
   const body = request.body
   const name = nameCheck(body.name)
-
 
   if (!body.name || !body.number) {
     return response.status(400).json({
@@ -82,16 +83,38 @@ app.post('/api/persons', (request, response) => {
       "error": "Name already exists"
     })
   }
-
   const entry = new Entry({
     name: body.name,
     number: body.number
   })
-  entry.save().then(savedEntry => {
-    console.log(savedEntry)
-    response.json(savedEntry)
-  })
+
+  entry.save()
+    .then(savedEntry => {
+      console.log(savedEntry)
+      response.json(savedEntry)
+    })
+    .catch(error => next(error))
 })
+
+
+// Error Middleware
+const unknownEndpoint = (request, response) => {
+  return response.status(404).send({ error: 'unknown endpoint'})
+}
+
+app.use(unknownEndpoint)
+
+const errorHandler = (error, request, response, next) => {
+  console.log('errorhandler called')
+  console.error('error name:', error.name)
+  console.error('error message:', error.message)
+  if (error.name === 'CastError') {
+    return response.status(400).send({ error: 'incorrect id' })
+  }
+  next(error)
+}
+
+app.use(errorHandler)
 
 const PORT = process.env.PORT
 app.listen(PORT)

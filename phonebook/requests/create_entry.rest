@@ -13,3 +13,12 @@ Content-Type: application/json
     "name": "John Deere", 
     "number": "01-45-7832122"
 }
+
+###
+POST http://localhost:3001/api/persons
+Content-Type: application/json
+
+{ 
+    "name": null,
+    "number": ""
+}
