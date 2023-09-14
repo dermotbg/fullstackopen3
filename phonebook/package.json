@@ -11,6 +11,7 @@
   "main": "phonebook.js",
   "devDependencies": {
     "@flydotio/dockerfile": "^0.4.9",
+    "eslint": "^8.49.0",
     "nodemon": "^3.0.1"
   },
   "scripts": {
@@ -20,7 +21,8 @@
     "build:ui": "rm -rf dist && cd ../../part2/phonebook/ && npm run build && cp -r dist ../../part3/phonebook/",
     "deploy": "fly deploy",
     "deploy:full": "npm run build:ui && npm run deploy",
-    "logs:prod": "fly logs"
+    "logs:prod": "fly logs",
+    "lint": "eslint phonebook.js"
   },
   "repository": {
     "type": "git",
