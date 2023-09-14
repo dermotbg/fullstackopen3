@@ -96,6 +96,20 @@ app.post('/api/persons', (request, response, next) => {
     .catch(error => next(error))
 })
 
+app.put('/api/persons/:id', (request, response, next) => {
+  const body = request.body
+  console.log(body);
+  const entry = {
+    name: body.name,
+    number: body.number,
+  }
+  Entry.findByIdAndUpdate(request.params.id, entry, {new: true})
+    .then(updatedEntry =>{
+      response.json(updatedEntry)
+    })
+    .catch(error => next(error))
+})
+
 
 // Error Middleware
 const unknownEndpoint = (request, response) => {
