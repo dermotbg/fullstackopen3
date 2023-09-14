@@ -14,8 +14,15 @@ mongoose.connect(url)
   })
 
 const entrySchema = mongoose.Schema({
-    name: String,
-    number: String,
+    name: {
+      type: String,
+      minLength: 3,
+      required: true
+    },
+    number: {
+      type: String,
+      required: true
+    },
 })
 
 entrySchema.set('toJSON', {
