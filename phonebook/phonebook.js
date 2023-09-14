@@ -78,16 +78,16 @@ app.post('/api/persons', (request, response, next) => {
   const body = request.body
   const name = nameCheck(body.name)
 
-  if (!body.name || !body.number) {
-    return response.status(400).json({
-      "error": "Name or Number missing"
-    })
-  }
-  else if (name) {
-    return response.status(400).json({
-      "error": "Name already exists"
-    })
-  }
+  // if (!body.name || !body.number) {
+  //   return response.status(400).json({
+  //     "error": "Name or Number missing"
+  //   })
+  // }
+  // else if (name) {
+  //   return response.status(400).json({
+  //     "error": "Name already exists"
+  //   })
+  // }
   const entry = new Entry({
     name: body.name,
     number: body.number
@@ -108,7 +108,7 @@ app.put('/api/persons/:id', (request, response, next) => {
     name: body.name,
     number: body.number,
   }
-  Entry.findByIdAndUpdate(request.params.id, entry, {new: true})
+  Entry.findByIdAndUpdate(request.params.id, entry, {new: true, runValidators: true, context: 'query'})
     .then(updatedEntry =>{
       response.json(updatedEntry)
     })

@@ -17,11 +17,18 @@ const entrySchema = mongoose.Schema({
     name: {
       type: String,
       minLength: 3,
-      required: true
+      required: [true, 'Name is required']
     },
     number: {
       type: String,
-      required: true
+      validate: {
+        validator: function(v) {
+          return /^\d{2,3}-\d+/.test(v)
+        },
+        message: props => `${props.value} not a valid phone number!`
+      },
+      minLength: [8, 'Minimnum number length is 8'],
+      required: [true, 'Phone number is required']
     },
 })
 
