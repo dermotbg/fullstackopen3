@@ -4,6 +4,7 @@ const express = require('express')
 const morgan = require('morgan')
 const app = express()
 const Entry = require('./models/entry')
+const entry = require('./models/entry')
 
 app.use(express.json())
 app.use(express.static('dist'))
@@ -52,10 +53,14 @@ app.get('/api/persons/:id', (request, response, next) => {
       .catch(error => next(error))
 })
 
-app.get('/info', (request, response) => {
+app.get('/info', (request, response, next) => {
   const date = new Date()
-  response.send(`<p>Phonebook has info for ${nameData.length} people</p>
+  Entry.countDocuments({})
+  .then(result => {
+    response.send(`<p>Phonebook has info for ${result} people</p>
   <p>${date}</p>`)
+  })
+  .catch(error => next(error))
 })
 
 app.delete('/api/persons/:id', (request, response, next) => {
